@@ -14,6 +14,7 @@
   ready(function () {
     initNav();
     initForm();
+    initOptout();
     Array.prototype.forEach.call(document.querySelectorAll("[data-carousel]"), initCarousel);
   });
 
@@ -201,6 +202,26 @@
     });
     window.matchMedia("(min-width: 72em)").addEventListener("change", function (mq) {
       if (mq.matches && toggle) setMenu(false);
+    });
+  }
+
+  /* ---------- email opt-out form (D-245) ---------- */
+  function initOptout() {
+    var form = document.getElementById("optout-form");
+    if (!form) return;
+    // The link carries only an opaque code (?t=...), never the address. Keep it in the form, then drop it from the
+    // address bar so it is not kept in history or shared by copying the address.
+    var m = /[?&]t=([0-9a-f]{48})(?:&|$)/.exec(window.location.search);
+    if (m) {
+      form.elements.opt_out_code.value = m[1];
+      form.elements.email.required = false;
+      document.getElementById("optout-email-hint").textContent = "Optional: your link already tells us which address to remove.";
+      if (window.history && window.history.replaceState) window.history.replaceState(null, "", window.location.pathname);
+    }
+    form.addEventListener("submit", function (e) {
+      if (form.getAttribute("data-mode") !== "preview") return;   // live: a plain post to the form endpoint
+      e.preventDefault();
+      document.getElementById("optout-status").textContent = "Preview site: your request was checked in the browser, but this preview does not send it anywhere.";
     });
   }
 

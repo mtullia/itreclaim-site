@@ -1,5 +1,5 @@
-/* Preview password gate (owner request 2026-11-26: site not finalized). Remove at launch:
-   delete this file and the gate.js <script> line from every page. */
+/* Preview password gate (owner request 2026-11-26: site not finalized; D-275, OWNER-REVIEW). Included only while
+   facts.yaml preview_gate is true (production build). Launch: set preview_gate: false and rebuild; this file is then not published. */
 (function () {
   var KEY = "itr-preview-ok";
   var HASH = "672ef4e7158dcd9a7b7defc91bedc216f6a6554302fd58f97d4a03622f96c4e9";
