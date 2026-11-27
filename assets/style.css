@@ -731,6 +731,62 @@ body:has(.preview-ribbon) .site-footer { padding-bottom: var(--space-7); }
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
 
+/* ---------- 10b. Redesign 2026-11-27 (D-W1127): equipment tags, sample certificate, audience doors, records + checklist, chip choices ---------- */
+.hero-chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-6); max-width: 36rem; }
+.hero-chip { padding: 0.2rem 0.65rem; border: 1px solid rgb(255 255 255 / 0.4); border-radius: var(--radius-sm); color: var(--dark-text); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.03em; }
+
+/* sample certificate: paper sheet, navy ink, red SAMPLE marks. Never styled as a real record. */
+.cert { position: relative; margin: 0; max-width: 30rem; display: grid; gap: var(--space-4); }
+.cert-sheet {
+  position: relative; overflow: hidden; background: #fbfaf6; color: #0b1a33; border: 1px solid #b9b19c; padding: var(--space-5);
+  box-shadow: 8px 8px 0 -1px #ebe6d8, 8px 8px 0 0 #8d97a8;
+}
+.cert-sheet::after {
+  content: "SAMPLE"; position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%) rotate(-18deg);
+  font-family: var(--font-display); font-weight: 800; font-size: clamp(3rem, 2rem + 4vw, 4.75rem); letter-spacing: 0.08em;
+  color: rgb(179 38 30 / 0.14); border: 5px solid rgb(179 38 30 / 0.14); padding: 0 0.6rem; pointer-events: none; user-select: none;
+}
+.cert-head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); padding-bottom: var(--space-3); border-bottom: 2px solid #0b1a33; }
+.cert-title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; line-height: 1.2; color: #0b1a33; }
+.cert-stamp { flex: none; border: 2px solid #b3261e; color: #b3261e; padding: 0 0.45rem; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; transform: rotate(4deg); }
+.cert-sub { margin: var(--space-2) 0 var(--space-3); font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.05em; text-transform: uppercase; color: #4a5a72; }
+.cert-table { position: relative; z-index: 1; width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.cert-table th { text-align: left; padding: 0.4rem 0.35rem; font-family: var(--font-mono); font-weight: 500; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: #0b1a33; border-bottom: 1px solid #0b1a33; }
+.cert-table td { padding: 0.45rem 0.35rem; border-bottom: 1px dashed #b9b19c; font-family: var(--font-mono); font-size: 0.76rem; color: #2a3a52; }
+.cert-foot { margin: var(--space-3) 0 0; font-size: 0.78rem; color: #4a5a72; }
+.cert-link { margin: 0; }
+@media (max-width: 30em) { .cert-sheet { padding: var(--space-4); } .cert-table th, .cert-table td { padding-inline: 0.2rem; } .cert-table td:nth-child(3) { display: none; } .cert-table th:nth-child(3) { display: none; } }
+
+/* audience doors */
+.door-grid { list-style: none; display: grid; gap: var(--space-6); }
+@media (min-width: 48em) { .door-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-7); } }
+.door { display: flex; flex-direction: column; gap: var(--space-3); padding-top: var(--space-4); border-top: 3px solid var(--accent); }
+.door-title { font-size: var(--step-1); margin: 0; }
+.door p { margin: 0; color: var(--text-muted); flex: 1; }
+.door-link { align-self: flex-start; font-weight: 700; color: var(--link); text-decoration: none; display: inline-flex; align-items: center; gap: var(--space-2); min-height: 2.75rem; }
+.door-link:hover { color: var(--link-hover); text-decoration: underline; }
+
+/* records + checklist lead magnet */
+.proof { display: grid; gap: var(--space-7); align-items: start; }
+@media (min-width: 64em) { .proof { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8); } }
+.magnet { background: var(--surface); border: 1.5px solid var(--heading); border-top-width: 4px; border-radius: var(--radius-sm); padding: var(--space-6); display: grid; gap: var(--space-3); min-width: 0; }
+.magnet-tag { margin: 0; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); }
+.magnet-title { font-size: var(--step-2); margin: 0; }
+.magnet p { margin: 0; color: var(--text-muted); }
+.lead-form { display: grid; gap: var(--space-3); margin-top: var(--space-2); }
+.lead-form .btn { justify-self: start; }
+.lead-note { font-size: 0.9rem; }
+.lead-form .form-status { min-height: 0; }
+
+/* equipment chips in the request form: real checkboxes, styled as tap chips */
+.chip-choices { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip-choice { position: relative; display: inline-flex; align-items: center; min-height: 2.75rem; padding: var(--space-2) var(--space-4); border: 1.5px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-weight: 600; cursor: pointer; }
+.chip-choice input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.chip-choice:hover { border-color: var(--heading); }
+.chip-choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); color: var(--heading); box-shadow: inset 0 -3px 0 var(--accent); }
+.chip-choice:has(input:checked) span::before { content: "\2713\00a0"; color: var(--accent-text); font-weight: 800; }
+.chip-choice:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+
 /* ---------- 11. Print ---------- */
 @media print {
   :root { --bg: #fff; --bg-alt: #fff; --surface: #fff; --text: #000; --text-muted: #222; --heading: #000; --link: #000; --border: #bbb; }
@@ -741,7 +797,7 @@ body:has(.preview-ribbon) .site-footer { padding-bottom: var(--space-7); }
   .hero, .page-hero, .tone-dark, .site-footer { background: #fff !important; color: #000 !important; }
   .hero :is(h1, h2, h3, p, li), .page-hero :is(h1, h2, h3, p), .tone-dark :is(h1, h2, h3, p, li), .site-footer * { color: #000 !important; }
   .section, .hero-inner, .page-hero-inner { padding-block: 1rem; }
-  .card, .step, .stage, .factor, .faq-item, .checklist li, .exhibit-sheet { box-shadow: none; break-inside: avoid; }
+  .card, .step, .stage, .factor, .faq-item, .checklist li, .exhibit-sheet, .cert-sheet, .door, .magnet { box-shadow: none; break-inside: avoid; }
   .card-link .card-title a::after { content: none; }
   main a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   details::details-content { content-visibility: visible; display: block; }

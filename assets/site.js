@@ -14,6 +14,7 @@
   ready(function () {
     initNav();
     initForm();
+    initLeadForm();
     initOptout();
     Array.prototype.forEach.call(document.querySelectorAll("[data-carousel]"), initCarousel);
   });
@@ -225,6 +226,55 @@
     });
   }
 
+  /* ---------- shared FormSubmit post ----------
+     The endpoint is the form action (plain address or hashed alias); the AJAX variant adds /ajax/. The only network call. */
+  function postForm(form, onOk, onFail) {
+    var endpoint = form.getAttribute("action") || "";
+    var target = endpoint.replace(/^(https:\/\/formsubmit\.co\/)(?!ajax\/)/, "$1ajax/");
+    var payload = {};
+    new FormData(form).forEach(function (value, key) {
+      if (key === "_next" || key === "_honey") return;
+      payload[key] = Object.prototype.hasOwnProperty.call(payload, key) ? payload[key] + ", " + value : value;
+    });
+    fetch(target, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+    .then(function (r) {
+      if (!r.ok) throw new Error("status " + r.status);
+      return r.json();
+    }).then(function (data) {
+      if (data && (data.success === false || data.success === "false")) throw new Error("rejected");
+      onOk();
+    }).catch(onFail);
+  }
+
+  /* ---------- checklist lead form (home) ----------
+     Without JS the form posts natively and FormSubmit returns to the checklist page. With JS the post is sent in the
+     background and the visitor goes straight to the checklist page. Bots (filled honeypot, instant submit) get the page, nothing is sent. */
+  function initLeadForm() {
+    var form = document.getElementById("checklist-form");
+    if (!form) return;
+    var started = Date.now();
+    var status = document.getElementById("lead-status");
+    form.addEventListener("submit", function (e) {
+      if (!form.checkValidity()) return;   // the browser shows its own message for a missing or malformed email
+      e.preventDefault();
+      var next = form.getAttribute("data-next");
+      var minMs = (parseInt(form.getAttribute("data-min-seconds"), 10) || 3) * 1000;
+      if (form.elements._honey.value || Date.now() - started < minMs) { window.location.href = next; return; }
+      if (form.getAttribute("data-mode") === "preview") {
+        status.textContent = "Preview site: nothing was sent. The checklist page opens next.";
+        window.setTimeout(function () { window.location.href = next; }, 900);
+        return;
+      }
+      var button = form.querySelector("button[type=submit]");
+      button.disabled = true;
+      status.textContent = "Sending...";
+      postForm(form, function () { window.location.href = next; }, function () {
+        button.disabled = false;
+        status.textContent = "Sorry, that could not be sent. Please try again in a moment.";
+      });
+    });
+  }
+
   /* ---------- request form ---------- */
   function initForm() {
     var form = document.getElementById("assessment-form");
@@ -337,22 +387,7 @@
       var button = form.querySelector("button[type=submit]");
       button.disabled = true;
       status.textContent = "Sending your request...";
-      // FormSubmit relay: the endpoint is the form action (plain address or hashed alias); the AJAX variant adds /ajax/.
-      var endpoint = form.getAttribute("action") || "";
-      var target = endpoint.replace(/^(https:\/\/formsubmit\.co\/)(?!ajax\/)/, "$1ajax/");
-      var payload = {};
-      new FormData(form).forEach(function (value, key) {
-        if (key === "_next" || key === "_honey") return;
-        payload[key] = Object.prototype.hasOwnProperty.call(payload, key) ? payload[key] + ", " + value : value;
-      });
-      fetch(target, { method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-      .then(function (r) {
-        if (!r.ok) throw new Error("status " + r.status);
-        return r.json();
-      }).then(function (data) {
-        if (data && (data.success === false || data.success === "false")) throw new Error("rejected");
-        done(false);
-      }).catch(function () {
+      postForm(form, function () { done(false); }, function () {
         button.disabled = false;
         status.textContent = "";
         formError.hidden = false;

@@ -114,6 +114,17 @@
 
   <fieldset class="form-group">
     <legend class="form-legend">About You</legend>
+    <div class="field field-narrow">
+      <label for="audience">I am a <span class="field-hint-inline">(optional)</span></label>
+      <select id="audience" name="audience">
+        <option value="">Choose one</option>
+        <option value="it-team">IT team at a company</option>
+        <option value="msp">Managed service provider</option>
+        <option value="data-center">Data center or hosting provider</option>
+        <option value="public-sector">School, hospital or public agency</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
     <div class="form-grid">
       <div class="field">
         <label for="company_name">Organization <span class="req" aria-hidden="true">*</span></label>
@@ -152,27 +163,28 @@
   <fieldset class="form-group">
     <legend class="form-legend">About the Equipment</legend>
     <fieldset class="field choice-group">
-      <legend>Equipment types <span class="field-hint-inline">(select all that apply)</span></legend>
-      <div class="choice-grid">
-        <label class="choice" for="eq-laptops-desktops"><input type="checkbox" id="eq-laptops-desktops" name="equipment" value="laptops-desktops"><span>Laptops and desktops</span></label>
-        <label class="choice" for="eq-servers-storage"><input type="checkbox" id="eq-servers-storage" name="equipment" value="servers-storage"><span>Servers and storage</span></label>
-        <label class="choice" for="eq-network"><input type="checkbox" id="eq-network" name="equipment" value="network"><span>Network equipment</span></label>
-        <label class="choice" for="eq-monitors-peripherals"><input type="checkbox" id="eq-monitors-peripherals" name="equipment" value="monitors-peripherals"><span>Monitors and peripherals</span></label>
-        <label class="choice" for="eq-phones-tablets"><input type="checkbox" id="eq-phones-tablets" name="equipment" value="phones-tablets"><span>Phones and tablets</span></label>
-        <label class="choice" for="eq-drives-media"><input type="checkbox" id="eq-drives-media" name="equipment" value="drives-media"><span>Loose hard drives and media</span></label>
-        <label class="choice" for="eq-other"><input type="checkbox" id="eq-other" name="equipment" value="other"><span>Other</span></label>
+      <legend>What are you retiring? <span class="field-hint-inline">(tap all that apply)</span></legend>
+      <div class="chip-choices">
+        <label class="chip-choice" for="eq-laptops"><input type="checkbox" id="eq-laptops" name="equipment" value="Laptops"><span>Laptops</span></label>
+        <label class="chip-choice" for="eq-desktops"><input type="checkbox" id="eq-desktops" name="equipment" value="Desktops"><span>Desktops</span></label>
+        <label class="chip-choice" for="eq-servers"><input type="checkbox" id="eq-servers" name="equipment" value="Servers"><span>Servers</span></label>
+        <label class="chip-choice" for="eq-storage"><input type="checkbox" id="eq-storage" name="equipment" value="Storage"><span>Storage</span></label>
+        <label class="chip-choice" for="eq-network"><input type="checkbox" id="eq-network" name="equipment" value="Network gear"><span>Network gear</span></label>
+        <label class="chip-choice" for="eq-monitors"><input type="checkbox" id="eq-monitors" name="equipment" value="Monitors"><span>Monitors</span></label>
+        <label class="chip-choice" for="eq-phones-tablets"><input type="checkbox" id="eq-phones-tablets" name="equipment" value="Phones &amp; tablets"><span>Phones &amp; tablets</span></label>
+        <label class="chip-choice" for="eq-loose-drives"><input type="checkbox" id="eq-loose-drives" name="equipment" value="Loose drives"><span>Loose drives</span></label>
+        <label class="chip-choice" for="eq-other"><input type="checkbox" id="eq-other" name="equipment" value="Other"><span>Other</span></label>
       </div>
     </fieldset>
     <div class="form-grid">
       <div class="field">
-        <label for="quantity">Approximate quantity</label>
-        <select id="quantity" name="quantity">
+        <label for="device_count">About how many devices?</label>
+        <select id="device_count" name="device_count">
           <option value="">Choose a range</option>
-          <option value="under-25">Fewer than 25 items</option>
-          <option value="25-100">25 to 100 items</option>
-          <option value="101-500">101 to 500 items</option>
-          <option value="over-500">More than 500 items</option>
-          <option value="unsure">Not sure yet</option>
+          <option value="under-50">Under 50</option>
+          <option value="50-250">50–250</option>
+          <option value="250-1000">250–1,000</option>
+          <option value="over-1000">1,000+</option>
         </select>
       </div>
       <div class="field">
@@ -218,6 +230,7 @@
     <input id="hp_honey" name="_honey" type="text" tabindex="-1" autocomplete="off">
   </div>
   <input type="hidden" name="elapsed_ms" id="elapsed_ms" value="">
+  <input type="hidden" name="lead_type" value="assessment">
   <input type="hidden" name="_subject" value="New ITAD assessment request - ITReclaim">
   <input type="hidden" name="_template" value="table">
   <input type="hidden" name="_captcha" value="false">
